@@ -11,13 +11,13 @@ class Coins:
   test_getset_nickels(coins)
   test_getset_pennies(coins)
   test_get_total(coins)ins coins values and number """
-    
+
     def __init__(self):
         self.quarters_value  = 25
         self.dimes_value     = 10
         self.nickels_value   = 5
         self.pennies_value   = 1
-    
+
         self.quarters_number = 0
         self.dimes_number    = 0
         self.nickels_number  = 0
@@ -28,19 +28,19 @@ class Coins:
 
     def get_quarters(self):
       return self.quarters_number
-  
+
     def set_dimes(self, dimes):
       self.dimes_number = dimes
 
     def get_dimes(self):
       return self.dimes_number
-  
+
     def set_nickels(self, nickels):
       self.nickels_number = nickels
 
     def get_nickels(self):
       return self.nickels_number
-  
+
     def set_pennies(self, pennies):
       self.pennies_number = pennies
 
@@ -72,8 +72,9 @@ class Cash_Register:
 
     def print_receipt(self):
       print("You did indeed buy a thing! Here's a receipt")
-      
+
     def calculate_coins_to_return(coins_tendered, coins_due):
+
       print ("todo")
 
     def render_transaction(self, coins_tendered, coins_due):
@@ -83,7 +84,7 @@ class Cash_Register:
       if amount_overpaid > 0:
           coins_to_return = calculate_coins_to_return(coins_tendered, coins_due)
 
-      #  check if they underpaid?  DO NOT LET THIS GO. YOU ARE BEING SHORTED MONIES.
+      #  check if they underpaid?  DO NOT LET THIS BASTARD GO. YOU ARE BEING SHORTED MONIES.
           if amount_overpaid < 0:
              return None
 
@@ -93,7 +94,7 @@ class Cash_Register:
 
       #  print a receipt.
           self.print_receipt()
-           
+
     # print status
     #coins.print_status()
 
@@ -136,9 +137,10 @@ def test_getset_pennies(coins):
     print ("Test FAIL")
 
 def test_get_total(coins):
-  
+
   if coins.get_total() == 89:
     print ("Test PASS")
+    print ("89 Cents")
   else:
     print ("Test FAIL")
 
@@ -155,6 +157,6 @@ def main():
   test_getset_pennies(coins)
   test_get_total(coins)
 
-if __name__== "__main__":
+if __name__ == "__main__":
 
     main()

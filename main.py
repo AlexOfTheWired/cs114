@@ -56,10 +56,10 @@ class Coins:
       return total
 
     def print_status(self):
-      print("number of quarters : {}").format(self.quarters_number)
-      print("number of dimes    : {}").format(self.dimes_number)
-      print("number of nickels  : {}").format(self.nickels_number)
-      print("number of pennies  : {}").format(self.pennies_number)
+      print("number of quarters : {100}").format(self.quarters_number)
+      print("number of dimes    : {50}").format(self.dimes_number)
+      print("number of nickels  : {20}").format(self.nickels_number)
+      print("number of pennies  : {10}").format(self.pennies_number)
 
 class Cash_Register:
   def __init__(self):
@@ -144,6 +144,10 @@ def test_get_total(coins):
   else:
     print ("Test FAIL")
 
+def print_status(coins):
+  coins.print_status()
+  #self.bills.print_status()
+
 def main():
   print ("Hello World!")
 
@@ -156,6 +160,8 @@ def main():
   test_getset_nickels(coins)
   test_getset_pennies(coins)
   test_get_total(coins)
+  print_status(coins)
+
 
 if __name__ == "__main__":
 

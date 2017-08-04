@@ -25,7 +25,7 @@ def calculate_coins_to_return(change):
         print ("Change after quaters : " + str(q_remainder))
         if q_remainder == 24:
             print("PASS")
-    if q_remainder > 25:
+    if q_remainder < 25:
         print (str( dimes_number) + " Dimes")
         print ("Change after dimes : " + str(d_remainder))
         if q_remainder == 4:

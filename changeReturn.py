@@ -11,9 +11,9 @@ def calculate_coins_to_return(change):
     pennies_value   = 1
 
     quarters_number  = change // quarters_value
-    dimes_number     = change // dimes_value
-    nickels_number   = change // nickels_value
-    pennies_number   = change // pennies_value
+    dimes_number     = q_remainder // dimes_value
+    nickels_number   = d_remainder // nickels_value
+    pennies_number   = n_remainder // pennies_value
 
     q_remainder = change - (quarters_number * quarters_value)
     d_remainder = change - (dimes_number * dimes_value)

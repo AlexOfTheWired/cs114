@@ -5,17 +5,19 @@ import sys
 import os
 
 """ Text based game where user makes decisions which affect
-a series of encounters with enemies """
+a series of encounters with enemies. """
+
 class Character(object):
-    def __init__(self, name, hp):
-        self.name = name
-        self.hp   = hp
+    def __init__(self, name, hp, attack):
+        self.name   = name
+        self.hp     = hp
+        self.attack = attack
+        self.dead   = False
 
-        self.dead = False
-
-    def attack(self, player, enemy):
+    def player_attack(self, player, enemy):
         rand_damage = random.randint(8, 32)
-        enemy.hp -= rand_damage
+        hit_damage  = rand_damage * (player.attack // enemy.defense)
+        enemy.hp   -= hit_damage
         print(rand_damage, " damage!")
         return enemy
 
@@ -25,13 +27,12 @@ class Character(object):
             self.dead = True
             self.hp = 0
 
-
 class Player():
-    def __init__( self, name ):
+    def __init__( self, name, hp ):
 
         self.name      = name
-        self.hp        = 100
-        self.attack    = 10
+        self.hp        = hp
+        self.attack    = 20
         self.defense   = 10
         self.inventory = []
 
@@ -43,14 +44,30 @@ class Player():
 
         return setattr(self, "name", name)
 
+    def get_item(player):
+        item_list = ["MRE", "First Aid Kit", "Meth-Pack"]
+
+        print("You find a ", item_list[random.randint(0, 2)], "your health increased by ",
+        (abs(player.hp - 100)), "HP")
+        # player['HP'] += (abs(player['HP'] - 100))
+        player.hp = 100
+        return player
+
 class Enemy():
-    def __init__(self, name):
+    def __init__(self, name, hp):
 
         self.name      = name
-        self.hp        = 50
+        self.hp        = hp
         self.attack    = 10
         self.defense   = 10
         self.inventory = []
+
+    def enemy_attack(self, player, enemy):
+        rand_damage = random.randint(8, 32)
+        hit_damage  = rand_damage * (enemy.attack // player.defense)
+        player.hp   -= hit_damage
+        print(rand_damage, " damage!")
+        return enemy
 
 class Story():
 
@@ -63,13 +80,12 @@ class Story():
         "Disembodied Voice: \"Hello, Unit-23. You have just come out of a 32-Year cryosleep.\" \n"
         "\"Temporary amnesia is a side effect of sleep... do you remember your name?\" \n"
         )
-
         return intro_01
 
     def display_intro_02(self):
         intro_02 = (
         "\n\n"
-        "Disembodied Voice: \"Ah yes, " + player.name + ". It is nice see you are alive. \n"
+        "Disembodied Voice: \"Ah yes, " + player.name + ". It is nice to see you are alive. \n"
         "all other occupants have become decea-\" \n"
         "The AI has suddenly stopped talking, and a serious metalic noises echo in the area. \n"
         "You hear something scampering towards you in the darkness. \n"
@@ -84,7 +100,7 @@ class Story():
         "You have narrowly beaten the AI. \n"
         "The room is dead silent again, with the exception of your pounding heart. \n"
         "You feel around the room for a light switch, hoping to navigate the surrounding area more easily. \n"
-        "Finally the lights com on by themselves and you can see the door into the main corridoor. \n"
+        "Finally the lights com on by themselves and you can see the door into the main corridoor. \n\n"
         )
         return story_01
 
@@ -94,15 +110,15 @@ class Story():
         "You follow it. \n"
         "Suddenly you hear the snarling of a Dog behind you. \n"
         "It\'s eyes are glazed over and blood oozes from its mouth. \n"
-        "The Zombie Dog Lunges at you."
+        "The Zombie Dog Lunges at you. \n\n"
         )
         return story_02
 
 class Logic():
 
     def game_over(self):
-        if self.dead == True:
-            return sys.quit()
+        if character.dead == True:
+            return sys.exit()
 
     def game_complete(self, oppo1, oppo2):
         if oppo1.hp > 0 and oppo2.hp <= 0:
@@ -112,22 +128,21 @@ class Logic():
     def continue_CMD(self):
         return input('Press any key to continue')
 
-
-
     def fight(self, oppo1, oppo2):
         while (oppo1.hp > 0) and (oppo2.hp > 0):
             print(oppo1.name, " attacks ", oppo2.name)
-            character.attack(oppo2, oppo1)
+            character.player_attack(oppo1, oppo2)
             if oppo2.hp <= 0:
-                character.update(oppo2)
-                self.game_complete(oppo1, oppo2)
+                character.update()
+                if oppo2.name == "Zombie Dog":
+                    self.game_complete(oppo1, oppo2)
             else:
                 print(oppo2.name, " attacks ", oppo1.name)
-                character.attack(oppo1, oppo2)
+                oppo2.enemy_attack(oppo1, oppo2)
             if oppo1.hp <= 0:
-                character.update(oppo2)
+                character.update()
                 print(oppo2.name, " is winner")
-                self.game_over(oppo1)
+                self.game_over()
         print(player.name + ': ' , oppo1.hp)
         print(enemy1.name + ': ', oppo2.hp)
 
@@ -137,20 +152,20 @@ class Logic():
             # if player['HP'] <= 0:
             #     return game_over(player)
             input('Press any key to continue')
-        elif enemy.name == "Zombie AI":
+        elif opponent.name == "Zombie AI":
             self.fight(player, opponent)
             # return player
         else:
-            get_item(player)
+            player.get_item()
             input('Press any key to continue')
 
 
-player    = Player("default")
-enemy1    = Enemy("Zombie AI")
-enemy2    = Enemy("Zombie Dog")
+player    = Player("default", 100)
+enemy1    = Enemy("Zombie AI", 20)
+enemy2    = Enemy("Zombie Dog", 40)
 story     = Story()
 logic     = Logic()
-character = Character(player.name, player.hp)
+character = Character(player.name, player.hp, player.attack)
 
 def main():
 
@@ -174,7 +189,7 @@ def main():
 
     print(story.display_story_02())
 
-    print("Encounter 2:")
+    print("Encounter 2: \n\n")
 
     logic.encounter(player, enemy2)
 
